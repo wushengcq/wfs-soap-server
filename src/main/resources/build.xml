@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE project>
-<project name="cxf wsdl2java" basedir=".">
+<project name="cxf wsdl2java" basedir="." default="wsdl2java">
 	<property name="cxf.home" location="/home/ws/Workspace/pde/cxf" />
 
 	<path id="cxf.classpath">
@@ -16,7 +16,7 @@
 			<arg value="-b" />
 			<arg value="binding.xjb" />
 			<arg value="-d" />
-			<arg value="src" />
+			<arg value="../java" />
 			<arg value="ASU_WFS_SOAP.wsdl" />
 			<classpath>
 				<path refid="cxf.classpath" />

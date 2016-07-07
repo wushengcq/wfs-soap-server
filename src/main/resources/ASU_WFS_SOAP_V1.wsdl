@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:ns="http://wfs.ows.asu.edu"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+	xmlns:wfs="http://www.opengis.net/wfs/2.0"
+	xmlns:ows="http://www.opengis.net/ows/1.1"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:soap11="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:xformat="http://cxf.apache.org/bindings/xformat"
+	name="WfsOws"	targetNamespace="http://wfs.ows.asu.edu">
+	<wsdl:types>
+		<xsd:schema targetNamespace="http://www.opengis.net/wfs/2.0">
+			<xsd:include schemaLocation="http://schemas.opengis.net/wfs/2.0/wfs.xsd" />
+		</xsd:schema>
+		<xsd:schema targetNamespace="http://www.opengis.net/ows/1.1">
+			<xsd:include schemaLocation="http://schemas.opengis.net/ows/1.1.0/owsAll.xsd" />
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="GetCapabilitiesRequest">
+		<wsdl:part element="wfs:GetCapabilities" name="BodyElement" />
+	</wsdl:message>
+	<wsdl:message name="GetCapabilitiesResponse">
+		<wsdl:part element="wfs:WFS_Capabilities" name="BodyElement" />
+	</wsdl:message>
+	<wsdl:message name="ServiceExceptionReport">
+		<wsdl:part element="ows:ExceptionReport" name="BodyElement" />
+	</wsdl:message>
+	<wsdl:portType name="WfsPortType">
+		<wsdl:operation name="GetCapabilities">
+			<wsdl:input message="ns:GetCapabilitiesRequest" />
+			<wsdl:output message="ns:GetCapabilitiesResponse" />
+			<wsdl:fault message="ns:ServiceExceptionReport" name="serviceException"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="WfsHttpBinding" type="ns:WfsPortType">
+		<xformat:binding/>
+		<http:binding verb="POST"/>
+		<wsdl:operation name="GetCapabilities">
+			<http:operation location="GetCapabilities" />
+			<wsdl:input>
+				<mime:content part="BodyElement" type="application/xml" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content part="BodyElement" type="application/xml" />
+			</wsdl:output>
+			<wsdl:fault name="serviceException">
+				<mime:content part="BodyElement" type="application/xml"/>
+			</wsdl:fault> 
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="WfsSoap11Binding" type="ns:WfsPortType">
+		<soap11:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="GetCapabilities">
+			<soap11:operation soapAction="GetCapabilities" style="document"/>
+			<wsdl:input >
+				<soap11:body use="literal" />
+			</wsdl:input>
+			<wsdl:output >
+				<soap11:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="serviceException">
+				<soap11:fault use="literal" name="serviceException"/>
+			</wsdl:fault> 
+		</wsdl:operation>
+	</wsdl:binding>	
+	<wsdl:binding name="WfsSoap12Binding" type="ns:WfsPortType">
+		<soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="GetCapabilities">
+			<soap12:operation soapAction="GetCapabilities" soapActionRequired="true" style="document"/>
+			<wsdl:input >
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output >
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="serviceException">
+				<soap12:fault use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="WfsSoapService">
+		<wsdl:port name="WfsHttpService" binding="ns:WfsHttpBinding" >
+			<http:address location="http://polar.geodacenter.org/services/ows/wfs/kvp" />
+		</wsdl:port>		
+		<wsdl:port name="WfsSoap11Service" binding="ns:WfsSoap11Binding" >
+			<soap11:address location="http://polar.geodacenter.org/services/ows/wfs/soap11" />
+		</wsdl:port>		
+		<wsdl:port name="WfsSoap12Service" binding="ns:WfsSoap12Binding" >
+			<soap12:address location="http://polar.geodacenter.org/services/ows/wfs/soap12" />
+		</wsdl:port>		
+	</wsdl:service>
+</wsdl:definitions>

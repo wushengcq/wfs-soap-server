@@ -24,34 +24,52 @@
 	<import resource="classpath:META-INF/cxf/cxf.xml" />
 	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
 
-	<bean id="wfsHttpServiceImpl" class="edu.asu.gci.ws.wfs.WfsHttpServiceImpl"></bean>
-	<bean id="wfsSoap11ServiceImpl" class="edu.asu.gci.ws.wfs.WfsSoap11ServiceImpl"></bean>
-	<bean id="wfsSoap12ServiceImpl" class="edu.asu.gci.ws.wfs.WfsSoap12ServiceImpl"></bean>
+	<bean id="wfsSoapServiceImpl" class="edu.asu.ows.wfs.WfsSoapServiceImpl"></bean>
 
-	<jaxws:server id="kvp" serviceClass="edu.asu.gci.ws.wfs.WfsPortType" address="/wfs/kvp"
+	<jaxws:server id="kvp" serviceClass="edu.asu.ows.wfs.WfsPortType" address="/wfs/post"
 		bindingId="http://cxf.apache.org/bindings/xformat">
 		<jaxws:serviceBean>
-			<ref bean="wfsHttpServiceImpl" />
+			<ref bean="wfsSoapServiceImpl" />
 		</jaxws:serviceBean>	
 	</jaxws:server>
 
-	<jaxws:server id="soap11" serviceClass="edu.asu.gci.ws.wfs.WfsPortType" address="/wfs/soap11"
+	<jaxws:server id="soap11" serviceClass="edu.asu.ows.wfs.WfsPortType" address="/wfs/soap/1.1"
 		bindingId="http://schemas.xmlsoap.org/wsdl/soap/http">
 		<jaxws:serviceBean>
-			<ref bean="wfsSoap11ServiceImpl" />
+			<ref bean="wfsSoapServiceImpl" />
 		</jaxws:serviceBean>
 		<jaxws:binding>
 			<soap:soapBinding mtomEnabled="false" version="1.1" />
 		</jaxws:binding>
 	</jaxws:server>
 
-	<jaxws:server id="soap12" serviceClass="edu.asu.gci.ws.wfs.WfsPortType" address="/wfs/soap12"
+	<jaxws:server id="soap11-mtom" serviceClass="edu.asu.ows.wfs.WfsPortType" address="/wfs/soap/1.1/mtom"
+		bindingId="http://schemas.xmlsoap.org/wsdl/soap/http?mtom=true">
+		<jaxws:serviceBean>
+			<ref bean="wfsSoapServiceImpl" />
+		</jaxws:serviceBean>
+		<jaxws:binding>
+			<soap:soapBinding mtomEnabled="true" version="1.2" />
+		</jaxws:binding>
+	</jaxws:server>	
+
+	<jaxws:server id="soap12" serviceClass="edu.asu.ows.wfs.WfsPortType" address="/wfs/soap/1.2"
 		bindingId="http://www.w3.org/2003/05/soap/bindings/HTTP/">
 		<jaxws:serviceBean>
-			<ref bean="wfsSoap12ServiceImpl" />
+			<ref bean="wfsSoapServiceImpl" />
 		</jaxws:serviceBean>
 		<jaxws:binding>
 			<soap:soapBinding mtomEnabled="false" version="1.2" />
+		</jaxws:binding>
+	</jaxws:server>
+	
+	<jaxws:server id="soap12-mtom" serviceClass="edu.asu.ows.wfs.WfsPortType" address="/wfs/soap/1.2/mtom"
+		bindingId="http://www.w3.org/2003/05/soap/bindings/HTTP/?mtom=true">
+		<jaxws:serviceBean>
+			<ref bean="wfsSoapServiceImpl" />
+		</jaxws:serviceBean>
+		<jaxws:binding>
+			<soap:soapBinding mtomEnabled="true" version="1.2" />
 		</jaxws:binding>
 	</jaxws:server>
 </beans>

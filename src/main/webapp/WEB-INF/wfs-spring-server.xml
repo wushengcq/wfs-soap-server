@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans 
+	xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd 
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx-4.0.xsd 
+	http://www.springframework.org/schema/jee 
+	http://www.springframework.org/schema/jee/spring-jee-4.0.xsd 
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context-4.0.xsd 
+	http://www.springframework.org/schema/aop 
+    http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+    http://www.springframework.org/schema/task
+    http://www.springframework.org/schema/task/spring-task-4.0.xsd
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx.xsd"
+	default-lazy-init="true">
+    
+    <context:annotation-config />
+	<context:component-scan base-package="edu.asu.ows"/>
+	<context:component-scan base-package="edu.asu.datastore"/>
+
+	<bean id="serviceIdentification" class="edu.asu.ows.ServiceIdentification">
+		<property name="title" value="WFS SOAP Server"></property>
+		<property name="abstraction" value="This Web Feature Service is established for the testing of OGC Testbed-12 WFS SOAP server project."></property>
+		<property name="keywords" value="WFS|SOAP|OGC Testbed12"></property>
+		<property name="serviceType" value="WFS"></property>
+		<property name="serviceTypeVersion" value="2.0.0"></property>
+		<property name="fees" value="NONE"></property>
+		<property name="accessConstraints" value="NONE"></property>
+		<property name="serviceSchemaUrl" value="http://polar.geodacenter.org"></property>
+		<property name="serviceNameSpace" value="testbed12"></property>
+		<property name="serviceUrl" value="http://localhost:8080/services/ows/wfs"></property>
+	</bean>
+	
+	<bean id="serviceProvider" class="edu.asu.ows.ServiceProvider">
+		<property name="providerName" value="Arizona State University"></property>
+		<property name="IndividualName" value="Wenwen Li"></property>
+		<property name="positionName" value="Professor"></property>
+		<property name="voice" value=""></property>
+		<property name="facsimile" value=""></property>
+		<property name="deliveryPoint" value="975 S Myrtle Ave"></property>
+		<property name="city" value="Tempe"></property>
+		<property name="administrativeArea" value="Arizona"></property>
+		<property name="postalCode" value="85287-5302"></property>
+		<property name="country" value="US"></property>
+		<property name="electronicMailAddress" value="wenwen@asu.edu"></property>
+	</bean>
+        
+
+</beans>

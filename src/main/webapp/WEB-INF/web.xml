@@ -9,7 +9,9 @@
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
-            /WEB-INF/wfs-spring-webservice.xml
+			/WEB-INF/wfs-spring-server.xml
+			/WEB-INF/wfs-spring-datasource.xml
+			/WEB-INF/wfs-spring-webservice.xml
         </param-value>
     </context-param>
 

@@ -79,6 +79,13 @@
 			<version>${servlet.verion}</version>
 			<scope>provided</scope>
 		</dependency>
+		
+		<dependency>
+		    <groupId>org.apache.tomcat</groupId>
+		    <artifactId>jasper</artifactId>
+		    <version>6.0.32</version>
+		    <scope>provided</scope>
+		</dependency>		
 
 		<dependency>
 			<groupId>jstl</groupId>
@@ -115,11 +122,17 @@
 			<artifactId>gt-epsg-hsql</artifactId>
 			<version>${geotools.version}</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>edu.asu</groupId>
+			<artifactId>wfs-wsdl</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		
 	</dependencies>
 
 	<build>
 		<finalName>${war.name}</finalName>
-
 		<plugins>
 			<!-- Eclipse project -->
 			<plugin>

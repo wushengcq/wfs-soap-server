@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+	<bean id="us-state" class="edu.asu.datastore.FeatureSourceFactory">
+		<property name="dataStoreParameters">
+			<map>
+				<entry key="url">
+					<bean class="java.net.URL">
+						<constructor-arg type="java.lang.String" value="file:/opt/data/us/cb_2015_us_state_20m/cb_2015_us_state_20m.shp" />
+					</bean>
+				</entry>
+			</map>
+		</property>
+		<property name="featureTypeName" value="cb_2015_us_state_20m"></property>
+		<property name="abstraction" value="Boundary of states of USA"></property>
+		<property name="keywords" value="features|states|boundary|united states"></property>
+	</bean>
+	
+	<bean id="us-county" class="edu.asu.datastore.FeatureSourceFactory">
+		<property name="dataStoreParameters">
+			<map>
+				<entry key="url">
+					<bean class="java.net.URL">
+						<constructor-arg type="java.lang.String" value="file:/opt/data/us/cb_2015_us_county_20m/cb_2015_us_county_20m.shp" />
+					</bean>
+				</entry>
+			</map>
+		</property>
+		<property name="featureTypeName" value="cb_2015_us_county_20m"></property>
+		<property name="abstraction" value="Boundary of counties of USA"></property>
+		<property name="keywords" value="features|county|boundary|united states"></property>
+	</bean>
+	
+	<bean id="featureSourceCollection" class="edu.asu.datastore.FeatureSourceCollection">
+		<property name="featureSourceFactories">
+			<list>
+				<ref bean="us-state" />
+				<ref bean="us-county" />
+			</list>
+		</property>
+	</bean>
+	
+</beans>
