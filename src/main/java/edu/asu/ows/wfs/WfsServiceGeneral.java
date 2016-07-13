@@ -9,6 +9,7 @@ public class WfsServiceGeneral {
 	private final static Logger logger = Logger.getLogger(WfsServiceGeneral.class);
 	private GetCapabilities capabilitiesServiceProvider = null;
 	private DescribeFeatureType describeFeatureType = null;
+	private GetFeature getFeature = null;
 	
 	protected ServiceExceptionReport throwServiceExceptionReport(Exception ex) {
 		if (logger.isDebugEnabled() ) {
@@ -34,4 +35,12 @@ public class WfsServiceGeneral {
 	public GetCapabilities getCapabilitiesServiceProvider() {
 		return capabilitiesServiceProvider;
 	}
+
+	@Autowired
+	public GetFeature getGetFeature() {
+		return getFeature;
+	}
+	public void setGetFeature(GetFeature getFeature) {
+		this.getFeature = getFeature;
+	}	
 }

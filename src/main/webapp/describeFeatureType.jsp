@@ -3,11 +3,12 @@
 <%@ page contentType ="text/html; charset=utf-8" session="true" %>
 <%
 String soapRequest = ""
-+ "<GetCapabilities service='WFS' "
++ "<DescribeFeatureType service='WFS' "
 + "xmlns='http://www.opengis.net/wfs/2.0' "
 + "xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' "
-+ "xsi:schemaLocation='http://www.opengis.net/wfs/2.0 "
-+ "http://schemas.opengis.net/wfs/2.0/wfs.xsd'/>";
++ "xsi:schemaLocation='http://www.opengis.net/wfs/2.0 http://schemas.opengis.net/wfs/2.0/wfs.xsd' >"
++ "<TypeName>" + (String)request.getParameter("dataset") + "</TypeName>"
++ "</DescribeFeatureType>";
 
 %>
 <%@ include file="operation-template.jsp"%>

@@ -2,6 +2,20 @@
 <%@ page contentType ="text/html; charset=utf-8" session="true" %>
 <%@ include file="header.jsp" %>
 <%@ include file="util.jsp" %>
+<%
+WebApplicationContext springContext = WebApplicationContextUtils.getWebApplicationContext(application);
+String appPath = request.getContextPath();
+FeatureSourceCollection featureSourceCollection = springContext.getBean(FeatureSourceCollection.class);
+
+String prot = request.isSecure() ? "https": "http";
+String host = request.getServerName();
+String path = request.getContextPath();
+int port = request.getServerPort(); 
+
+String binding = (String)request.getParameter("binding");
+String operation = (String)request.getParameter("operation");
+String dataset = (String)request.getParameter("dataset");
+%>
 <html>
 <head>
 	<style>		
@@ -24,7 +38,9 @@
 </div>
 
 <div class="row">
-	<div class=catalog>WSDL Catalog</div><a href="http://localhost:8080/services/ows" target="_blank"> http://localhost:8080/services/ows</a>
+	<div class=catalog>WSDL Catalog</div><a href="<%=prot%>://<%=host%>:<%=port%><%=path%>/ows" target="_blank"> 
+		<%=prot%>://<%=host%>:<%=port%><%=path%>/ows
+	</a>
 </div>
 
 <div class="row">
@@ -68,6 +84,22 @@
 			<%=operation.equals("describeFeatureType")? "checked='checked'" : "" %> >
 		<label for="describeFeatureType"> DescribeFeatureType</label>
 	</div>
+</div>
+<div class="row">
+	<div class="catalog">Data sources</div>
+	<%
+	for (FeatureSourceFactory sfs : featureSourceCollection.getFeatureSourceFactories()) {
+		StringBuffer sb = new StringBuffer();
+		sb.append("<div class='option'>");
+		sb.append("<input type='radio' class='dataset' name='dataset' ");
+		sb.append("id='").append(sfs.getFeatureTypeName()).append("' value='").append(sfs.getFeatureTypeName()).append("' ");
+		sb.append(dataset.equals(sfs.getFeatureTypeName())? "checked='checked'" : "");
+		sb.append(">");
+		sb.append("<label for='").append(sfs.getFeatureTypeName()).append("'> ").append(sfs.getFeatureTypeName()).append("</label>");
+		sb.append("</div>");
+		out.print(sb.toString());
+	}	
+	%>
 </div>
 <br/><br/>
 <div class="row">

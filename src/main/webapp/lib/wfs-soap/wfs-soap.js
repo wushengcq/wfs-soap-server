@@ -22,7 +22,7 @@ function initSendButton() {
     		path = "post"
     	}    	
     	var soapMessage = $("#soapMessage").val();
-		var endpoint = "http://localhost:8080/services/ows/wfs/" + path;
+		var endpoint = "/services/ows/wfs/" + path;
 		var protocol = $("#sendButton").attr("protocol");
 		var header = {'Accept':'text/plain, */*; q=0.01'};
         sendSoap(endpoint, soapMessage, header);
@@ -72,7 +72,10 @@ function initClearButton() {
 
 function initOptioinButton() {
 	$("input[type=radio]").change(function(e){
-		var url = getOperation() + ".jsp?binding=" + getBinding(); 
+		var url = getOperation() + ".jsp?"
+			+ "binding=" + getBinding() 
+			+ "&operation=" + getOperation()
+			+ "&dataset=" + getDataset(); 
 		window.location.href = url;
 	});
 }
@@ -83,6 +86,10 @@ function getBinding() {
 
 function getOperation() {
 	return $("input[name='operation']:checked").val();
+}
+
+function getDataset() {
+	return $("input[name='dataset']:checked").val();
 }
 
 function formatSoapRequest() {

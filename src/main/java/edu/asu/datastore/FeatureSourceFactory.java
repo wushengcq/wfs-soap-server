@@ -111,7 +111,6 @@ public class FeatureSourceFactory implements ICapabilities {
 	public void setServiceIdentification(ServiceIdentification serviceIdentification) {
 		this.serviceIdentification = serviceIdentification;
 	}
-
 	public ServiceIdentification getServiceIdentification() {
 		return serviceIdentification;
 	}

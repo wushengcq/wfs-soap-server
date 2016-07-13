@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans 
     http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
-
+	<!-- 
 	<bean id="us-state" class="edu.asu.datastore.FeatureSourceFactory">
 		<property name="dataStoreParameters">
 			<map>
@@ -41,6 +41,11 @@
 				<ref bean="us-county" />
 			</list>
 		</property>
+	</bean>
+	 -->
+	 
+	<bean id="featureSourceCollection" class="edu.asu.datastore.FeatureSourceCollection">
+		<property name="searchPath" value="/opt/data/us/testbed12"></property>
 	</bean>
 	
 </beans>
