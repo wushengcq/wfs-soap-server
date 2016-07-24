@@ -66,6 +66,12 @@
 			<artifactId>cxf-rt-frontend-jaxrs</artifactId>
 			<version>${cxf.version}</version>
 		</dependency>
+		
+		<dependency>
+		    <groupId>org.apache.cxf</groupId>
+		    <artifactId>cxf-rt-ws-security</artifactId>
+		    <version>${cxf.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>javax.ws.rs</groupId>
@@ -79,7 +85,13 @@
 			<version>${servlet.verion}</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>wss4j</groupId>
+			<artifactId>wss4j</artifactId>
+			<version>1.5.1</version>
+		</dependency>
+
 		<dependency>
 		    <groupId>org.apache.tomcat</groupId>
 		    <artifactId>jasper</artifactId>
@@ -121,6 +133,12 @@
 			<groupId>org.geotools</groupId>
 			<artifactId>gt-epsg-hsql</artifactId>
 			<version>${geotools.version}</version>
+		</dependency>
+		
+		<dependency>
+		  <groupId>org.geotools</groupId>
+		  <artifactId>gt-xml</artifactId>
+		  <version>${geotools.version}</version>
 		</dependency>
 		
 		<dependency>

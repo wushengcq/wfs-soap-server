@@ -87,6 +87,7 @@ public class DescribeFeatureType extends OperationGeneral implements IOperation 
 		case "java.lang.Integer":	return xsd+"int";
 		case "java.lang.Long":		return xsd+"long";
 		case "java.lang.BigInteger":return xsd+"integer";
+		case "java.lang.Double":	return xsd+"double";
 		case "java.lang.BigDecimal":return xsd+"decimal";
 		case "java.util.Date":		return xsd+"dateTime";
 		case "java.sql.Time":		return xsd+"date";

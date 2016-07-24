@@ -32,6 +32,12 @@
 	<wsdl:message name="DescribeFeatureTypeResponse">
 		<wsdl:part name="BodyElement" element="xsd:schema" />
 	</wsdl:message>
+	<wsdl:message name="GetFeatureRequest">
+		<wsdl:part name="BodyElement" element="wfs:GetFeature" />
+	</wsdl:message>
+	<wsdl:message name="GetFeatureResponse">
+		<wsdl:part name="BodyElement" element="wfs:FeatureCollection" />
+	</wsdl:message>	
 	<wsdl:portType name="WfsPortType">
 		<wsdl:operation name="GetCapabilities">
 			<wsdl:input message="ns:GetCapabilitiesRequest" />
@@ -41,6 +47,11 @@
 		<wsdl:operation name="DescribeFeatureType">
 			<wsdl:input message="ns:DescribeFeatureTypeRequest" />
 			<wsdl:output message="ns:DescribeFeatureTypeResponse" />
+			<wsdl:fault message="ns:ServiceExceptionReport" name="fault" />
+		</wsdl:operation>
+		<wsdl:operation name="GetFeature">
+			<wsdl:input message="ns:GetFeatureRequest" />
+			<wsdl:output message="ns:GetFeatureResponse" />
 			<wsdl:fault message="ns:ServiceExceptionReport" name="fault" />
 		</wsdl:operation>
 	</wsdl:portType>

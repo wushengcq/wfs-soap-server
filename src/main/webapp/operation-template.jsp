@@ -28,7 +28,7 @@ String dataset = (String)request.getParameter("dataset");
 	.funcbtn {font-size:16px;font-weight:bold;height:40px;width:80px;margin-top:80px;cursor:pointer}
 	label {cursor:pointer}
 	</style>
-	<link rel="icon" href="asu-fork.png?v=4" type="image/png" />
+	<link rel="icon" href="images/asu-fork.png?v=4" type="image/png" />
 </head>
 <body>
 
@@ -73,6 +73,20 @@ String dataset = (String)request.getParameter("dataset");
 </div>
 
 <div class="row">
+	<div class="catalog">&nbsp;</div> 
+	<div class="option">
+		<input type='radio' class="binding" name="binding" id="soap12-sec" value="soap12-sec" 
+			<%=binding.equals("soap12-sec")? "checked='checked'" : "" %> >
+		<label for="soap12-sec"> Secured SOAP1.2</label>
+	</div>
+	<div class="option">
+		<input type='radio' class="binding" name="binding" id="soap12mtom-sec" value="soap12mtom-sec"
+			<%=binding.equals("soap12mtom-sec")? "checked='checked'" : "" %> >
+		<label for="soap12mtom-sec"> Secured SOAP1.2 / MTOM</label>
+	</div>	
+</div>
+
+<div class="row">
 	<div class="catalog">WFS Operation</div>
 	<div class="option">
 		<input type='radio' class="operation" name="operation" id="getCapabilities" value="getCapabilities" 
@@ -84,6 +98,34 @@ String dataset = (String)request.getParameter("dataset");
 			<%=operation.equals("describeFeatureType")? "checked='checked'" : "" %> >
 		<label for="describeFeatureType"> DescribeFeatureType</label>
 	</div>
+	<div class="option">
+		<input type='radio' class="operation" name="operation" id="getFeature" value="getFeature" 
+			<%=operation.equals("getFeature")? "checked='checked'" : "" %> >
+		<label for="getFeature"> GetFeature</label>
+	</div>
+</div>
+<div class="row">
+	<div class="catalog">&nbsp;</div>
+	<div class="option">
+		<input type='radio' class="operation" name="operation" id="getFeature_BBox" value="getFeature_BBox" 
+			<%=operation.equals("getFeature_BBox")? "checked='checked'" : "" %> >
+		<label for="getFeature_BBox"> getFeature_BBox</label>
+	</div>
+	<div class="option">
+		<input type='radio' class="operation" name="operation" id="getFeature_Intersect" value="getFeature_Intersect" 
+			<%=operation.equals("getFeature_Intersect")? "checked='checked'" : "" %> >
+		<label for="getFeature_Intersect"> getFeature_Intersect</label>
+	</div>	
+	<div class="option">
+		<input type='radio' class="operation" name="operation" id="getFeature_Between" value="getFeature_Between" 
+			<%=operation.equals("getFeature_Between")? "checked='checked'" : "" %> >
+		<label for="getFeature_Between"> getFeature_Between</label>
+	</div>	
+	<div class="option">
+		<input type='radio' class="operation" name="operation" id="getFeature_Equal" value="getFeature_Equal" 
+			<%=operation.equals("getFeature_Equal")? "checked='checked'" : "" %> >
+		<label for="getFeature_Equal"> getFeature_Equal</label>
+	</div>		
 </div>
 <div class="row">
 	<div class="catalog">Data sources</div>
@@ -110,7 +152,20 @@ String dataset = (String)request.getParameter("dataset");
 			sb.append("<soap:Envelope xmlns:soap='http://schemas.xmlsoap.org/soap/envelope/' ");
 			sb.append("xmlns:xsd='http://www.w3.org/2001/XMLSchema' ");
 			sb.append("xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>");
-			sb.append("<soap:Head></soap:Head>");
+			if (binding.endsWith("sec")){
+				sb.append("<soap:Header>");
+				sb.append("<wsse:Security xmlns:wsse='http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd' "
+						+ "xmlns:wsu='http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd' "
+						+ " soap:mustUnderstand='1'>");
+				sb.append("<wsse:UsernameToken wsu:Id='UsernameToken-a612a4ab-667a-4774-bc49-8c6c5833ebc1'>");
+				sb.append("<wsse:Username>guest</wsse:Username>");
+				sb.append("<wsse:Password Type='http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText'>123456</wsse:Password>");
+				sb.append("</wsse:UsernameToken>");
+				sb.append("</wsse:Security>");
+				sb.append("</soap:Header>");
+			}else {
+				sb.append("<soap:Head></soap:Head>");
+			}
 			sb.append("<soap:Body>");
 			sb.append(soapRequest);
 			sb.append("</soap:Body>");
@@ -119,7 +174,20 @@ String dataset = (String)request.getParameter("dataset");
 			sb.append("<soap:Envelope xmlns:soap='http://www.w3.org/2003/05/soap-envelope' ");
 			sb.append("xmlns:xsd='http://www.w3.org/2001/XMLSchema' ");
 			sb.append("xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>");
-			sb.append("<soap:Head></soap:Head>");
+			if (binding.endsWith("sec")){
+				sb.append("<soap:Header>");
+				sb.append("<wsse:Security xmlns:wsse='http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd' "
+						+ "xmlns:wsu='http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd' "
+						+ " soap:mustUnderstand='1'>");
+				sb.append("<wsse:UsernameToken wsu:Id='UsernameToken-a612a4ab-667a-4774-bc49-8c6c5833ebc1'>");
+				sb.append("<wsse:Username>guest</wsse:Username>");
+				sb.append("<wsse:Password Type='http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText'>123456</wsse:Password>");
+				sb.append("</wsse:UsernameToken>");
+				sb.append("</wsse:Security>");
+				sb.append("</soap:Header>");
+			}else {
+				sb.append("<soap:Head></soap:Head>");
+			}
 			sb.append("<soap:Body>");
 			sb.append(soapRequest);
 			sb.append("</soap:Body>");

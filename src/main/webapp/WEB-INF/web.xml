@@ -11,6 +11,7 @@
         <param-value>
 			/WEB-INF/wfs-spring-server.xml
 			/WEB-INF/wfs-spring-datasource.xml
+			/WEB-INF/wfs-cxf-security.xml
 			/WEB-INF/wfs-spring-webservice.xml
         </param-value>
     </context-param>

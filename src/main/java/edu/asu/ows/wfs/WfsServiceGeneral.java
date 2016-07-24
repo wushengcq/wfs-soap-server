@@ -15,7 +15,7 @@ public class WfsServiceGeneral {
 		if (logger.isDebugEnabled() ) {
 			ex.printStackTrace();
 		}
-		ServiceExceptionReport e = new ServiceExceptionReport();
+		ServiceExceptionReport e = new ServiceExceptionReport(ex.getMessage());
 		e.setStackTrace(ex.getStackTrace());
 		return e;
 	}
@@ -37,10 +37,10 @@ public class WfsServiceGeneral {
 	}
 
 	@Autowired
-	public GetFeature getGetFeature() {
-		return getFeature;
-	}
 	public void setGetFeature(GetFeature getFeature) {
 		this.getFeature = getFeature;
 	}	
+	public GetFeature getGetFeature() {
+		return getFeature;
+	}
 }

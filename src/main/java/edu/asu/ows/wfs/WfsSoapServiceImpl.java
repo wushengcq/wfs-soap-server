@@ -42,7 +42,7 @@ public class WfsSoapServiceImpl extends WfsServiceGeneral implements WfsPortType
 	public FeatureCollectionType getFeature(GetFeatureType request) throws ServiceExceptionReport {
 		try {
 			return this.getGetFeature().run(request);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			throw this.throwServiceExceptionReport(e);
 		}
 	}

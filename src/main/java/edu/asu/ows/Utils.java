@@ -5,8 +5,10 @@ import java.io.StringWriter;
 
 import javax.xml.bind.JAXB;
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.namespace.QName;
 
 public class Utils {
 	
@@ -33,6 +35,15 @@ public class Utils {
 	    Marshaller m = context.createMarshaller();
 	    m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 	    m.marshal(obj, out);
+		return out.toString();
+	}
+	
+	public static <T> String marshalV2(Class<T> clazz, T obj, String uri, String nodeName) throws JAXBException {
+	    StringWriter out = new StringWriter();		
+		JAXBContext context = JAXBContext.newInstance(clazz);
+	    Marshaller m = context.createMarshaller();
+	    m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+	    m.marshal(new JAXBElement<T>(new QName(uri, nodeName), clazz, obj), out);
 	    return out.toString();
 	}
 }

@@ -45,7 +45,7 @@
 	 -->
 	 
 	<bean id="featureSourceCollection" class="edu.asu.datastore.FeatureSourceCollection">
-		<property name="searchPath" value="/opt/data/us/testbed12"></property>
+		<property name="searchPath" value="/opt/data/san_francisco"></property>
 	</bean>
 	
 </beans>
