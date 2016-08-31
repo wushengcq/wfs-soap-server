@@ -14,6 +14,8 @@ import org.geotools.data.FeatureSource;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+
 import edu.asu.ows.ICapabilities;
 import edu.asu.ows.ServiceIdentification;
 
@@ -89,20 +91,15 @@ public class FeatureSourceCollection implements ICapabilities {
 		StringBuffer sb = new StringBuffer();
 		sb.append("<FeatureTypeList>");
 		for (FeatureSourceFactory fsf : this.getFeatureSourceFactories()) {
-			try {
-				String capabilities = fsf.getCapabilities();
-				sb.append(capabilities);
-			} catch (IOException e) {
-				if(logger.isDebugEnabled()){
-					e.printStackTrace();
-				}
-			}
+			String capabilities = fsf.getCapabilities();
+			sb.append(capabilities);
 		}
 		sb.append("</FeatureTypeList>");
 		return sb.toString();
 	}
 
 	@Autowired
+	@Qualifier("wfsServiceIdentification")
 	public void setServiceIdentification(ServiceIdentification serviceIdentification) {
 		this.serviceIdentification = serviceIdentification;
 	}

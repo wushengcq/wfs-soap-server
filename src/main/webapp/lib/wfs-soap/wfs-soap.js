@@ -19,11 +19,13 @@ function initSendButton() {
     	} else if (binding == "soap11mtom") {
     		path = "soap/1.1/mtom";
     	} else if (binding == "post") {
-    		path = "post"
+    		path = "kvp"
     	} else if (binding == "soap12-sec") {
     		path = "soap/1.2/sec"
-    	} else if (binding == "soap12mtom-sec") {
-    		path = "soap/1.2/mtom-sec"
+    	} else if (binding == "soap11-sec") {
+    		path = "soap/1.1/sec"
+    	} else if (binding == "soap12-encrypt") {
+    		path = "soap/1.2/encrypt"
     	}   	
     	var soapMessage = $("#soapMessage").val();
 		var endpoint = "/services/ows/wfs/" + path;

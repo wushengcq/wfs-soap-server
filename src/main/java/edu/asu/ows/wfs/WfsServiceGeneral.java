@@ -7,9 +7,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class WfsServiceGeneral {
 	private final static Logger logger = Logger.getLogger(WfsServiceGeneral.class);
-	private GetCapabilities capabilitiesServiceProvider = null;
-	private DescribeFeatureType describeFeatureType = null;
-	private GetFeature getFeature = null;
+//	@Autowired protected GetCapabilities2_0 getCapabilities2_0 = null;
+//	@Autowired protected GetCapabilities1_1 getCapabilities1_1 = null;
+	@Autowired protected GetCapabilities getCapabilities = null;
+	@Autowired protected DescribeFeatureType describeFeatureType = null;
+	@Autowired protected GetFeature getFeature = null;
 	
 	protected ServiceExceptionReport throwServiceExceptionReport(Exception ex) {
 		if (logger.isDebugEnabled() ) {
@@ -20,27 +22,27 @@ public class WfsServiceGeneral {
 		return e;
 	}
 	
-	@Autowired
-	public void setDescribeFeatureType(DescribeFeatureType describeFeatureType) {
-		this.describeFeatureType = describeFeatureType;
-	}
-	public DescribeFeatureType getDescribeFeatureType() {
-		return describeFeatureType;
-	}
-
-	@Autowired
-	public void setCapabilitiesServiceProvider(GetCapabilities getCapabilitiesServiceProvider) {
-		this.capabilitiesServiceProvider = getCapabilitiesServiceProvider;
-	}
-	public GetCapabilities getCapabilitiesServiceProvider() {
-		return capabilitiesServiceProvider;
-	}
-
-	@Autowired
-	public void setGetFeature(GetFeature getFeature) {
-		this.getFeature = getFeature;
-	}	
-	public GetFeature getGetFeature() {
-		return getFeature;
-	}
+//	@Autowired
+//	public void setDescribeFeatureType(DescribeFeatureType describeFeatureType) {
+//		this.describeFeatureType = describeFeatureType;
+//	}
+//	public DescribeFeatureType getDescribeFeatureType() {
+//		return describeFeatureType;
+//	}
+//
+//	@Autowired
+//	public void setCapabilitiesServiceProvider(GetCapabilities getCapabilitiesServiceProvider) {
+//		this.capabilitiesServiceProvider = getCapabilitiesServiceProvider;
+//	}
+//	public GetCapabilities getCapabilitiesServiceProvider() {
+//		return capabilitiesServiceProvider;
+//	}
+//
+//	@Autowired
+//	public void setGetFeature(GetFeature getFeature) {
+//		this.getFeature = getFeature;
+//	}	
+//	public GetFeature getGetFeature() {
+//		return getFeature;
+//	}
 }

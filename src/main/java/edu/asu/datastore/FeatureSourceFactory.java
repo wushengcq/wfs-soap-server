@@ -24,7 +24,7 @@ public class FeatureSourceFactory implements ICapabilities {
 	private String abstraction = "";
 	private String keywords = "";
 	private ServiceIdentification serviceIdentification = null;
-	private Logger log = Logger.getLogger(FeatureSourceFactory.class);
+	private Logger logger = Logger.getLogger(FeatureSourceFactory.class);
 
 	public FeatureSource<SimpleFeatureType, SimpleFeature> getFeatureSource() throws IOException {
 		DataStore dataStore = DataStoreFinder.getDataStore(this.getDataStoreParameters());
@@ -32,7 +32,7 @@ public class FeatureSourceFactory implements ICapabilities {
 	}
 
 	@Override
-	public String getCapabilities() throws IOException {
+	public String getCapabilities() {
 		try {
 			FeatureSource<SimpleFeatureType, SimpleFeature> fs = this.getFeatureSource();
 			ReferencedEnvelope wgs84Box = fs.getBounds().transform(DefaultGeographicCRS.WGS84, true);
@@ -60,10 +60,14 @@ public class FeatureSourceFactory implements ICapabilities {
 					.append("</ows:UpperCorner>");
 			sb.append("</ows:WGS84BoundingBox>");
 			sb.append("</FeatureType>");
-			log.debug(sb.toString());
+			logger.debug(sb.toString());
 			return sb.toString();
 		} catch (Exception ex) {
-			throw new IOException(ex);
+			if(logger.isDebugEnabled()){
+				ex.printStackTrace();
+			}
+			logger.error(ex);
+			return "";
 		}
 	}
 

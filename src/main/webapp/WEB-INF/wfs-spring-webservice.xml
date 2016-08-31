@@ -28,7 +28,7 @@
 	<bean id="wfsSoapServiceImpl" class="edu.asu.ows.wfs.WfsSoapServiceImpl"></bean>
 
 	<jaxws:server id="kvp" serviceClass="edu.asu.ows.wfs.WfsPortType"
-		address="/wfs/post" bindingId="http://cxf.apache.org/bindings/xformat">
+		address="/wfs/kvp" bindingId="http://cxf.apache.org/bindings/xformat">
 		<jaxws:serviceBean>
 			<ref bean="wfsSoapServiceImpl" />
 		</jaxws:serviceBean>
@@ -73,6 +73,24 @@
 			<soap:soapBinding mtomEnabled="true" version="1.2" />
 		</jaxws:binding>
 	</jaxws:server>
+		
+	<jaxws:server id="soap11-security" serviceClass="edu.asu.ows.wfs.WfsPortType"
+		address="/wfs/soap/1.1/sec" bindingId="http://www.w3.org/2003/05/soap/bindings/HTTP/">
+		<jaxws:serviceBean>
+			<ref bean="wfsSoapServiceImpl" />
+		</jaxws:serviceBean>
+		<jaxws:binding>
+			<soap:soapBinding mtomEnabled="false" version="1.1" />
+		</jaxws:binding>
+		<jaxws:inInterceptors>
+			<bean class="org.apache.cxf.interceptor.LoggingInInterceptor"></bean> 
+			<bean class="org.apache.cxf.binding.soap.saaj.SAAJInInterceptor" />
+			<ref bean="passwordTextInterceptor" />
+		</jaxws:inInterceptors>
+		<jaxws:outInterceptors>
+            <bean class="org.apache.cxf.interceptor.LoggingOutInterceptor"></bean>  
+        </jaxws:outInterceptors>		
+	</jaxws:server>	
 	
 	<jaxws:server id="soap12-security" serviceClass="edu.asu.ows.wfs.WfsPortType"
 		address="/wfs/soap/1.2/sec" bindingId="http://www.w3.org/2003/05/soap/bindings/HTTP/">
@@ -83,25 +101,34 @@
 			<soap:soapBinding mtomEnabled="false" version="1.2" />
 		</jaxws:binding>
 		<jaxws:inInterceptors>
+			<bean class="org.apache.cxf.interceptor.LoggingInInterceptor"></bean> 
 			<bean class="org.apache.cxf.binding.soap.saaj.SAAJInInterceptor" />
-			<ref bean="wss4JInInterceptor" />
+			<ref bean="passwordDigestInterceptor" />
 		</jaxws:inInterceptors>
+		<jaxws:outInterceptors>  
+            <bean class="org.apache.cxf.interceptor.LoggingOutInterceptor"></bean>  
+        </jaxws:outInterceptors>		
 	</jaxws:server>
 	
-	<jaxws:server id="soap12-mtom-security" serviceClass="edu.asu.ows.wfs.WfsPortType"
-		address="/wfs/soap/1.2/mtom-sec" bindingId="http://www.w3.org/2003/05/soap/bindings/HTTP/?mtom=true">
+	<jaxws:server id="soap12-encrypt" serviceClass="edu.asu.ows.wfs.WfsPortType"
+		address="/wfs/soap/1.2/encrypt" bindingId="http://www.w3.org/2003/05/soap/bindings/HTTP/">
 		<jaxws:serviceBean>
 			<ref bean="wfsSoapServiceImpl" />
 		</jaxws:serviceBean>
 		<jaxws:binding>
-			<soap:soapBinding mtomEnabled="true" version="1.2" />
+			<soap:soapBinding mtomEnabled="false" version="1.2" />
 		</jaxws:binding>
 		<jaxws:inInterceptors>
+			<bean class="org.apache.cxf.interceptor.LoggingInInterceptor"></bean> 
 			<bean class="org.apache.cxf.binding.soap.saaj.SAAJInInterceptor" />
-			<ref bean="wss4JInInterceptor" />
+			<ref bean="encryptInterceptor" />
 		</jaxws:inInterceptors>
+		<jaxws:outInterceptors>  
+            <bean class="org.apache.cxf.interceptor.LoggingOutInterceptor"></bean>
+            <bean class="org.apache.cxf.binding.soap.saaj.SAAJOutInterceptor" />
+           	<ref bean="encryptOutInterceptor"/>
+        </jaxws:outInterceptors>		
 	</jaxws:server>	
 	
 </beans>
- 
- 
+

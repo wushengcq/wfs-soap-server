@@ -29,11 +29,7 @@
 		<property name="users">
 			<list>
 				<bean id="user1" class="edu.asu.ows.secure.User">
-					<property name="name" value="guest"></property>
-					<property name="password" value="123456"></property>
-				</bean>
-				<bean id="user2" class="edu.asu.ows.secure.User">
-					<property name="name" value="admin"></property>
+					<property name="name" value="user1"></property>
 					<property name="password" value="123456"></property>
 				</bean>
 			</list>
@@ -42,7 +38,7 @@
 
 	<bean id="securePasswordCallback" class="edu.asu.ows.secure.SecurePasswordCallback"></bean>
 
-	<bean id="wss4JInInterceptor" class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
+	<bean id="passwordTextInterceptor" class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
 		<constructor-arg>
 			<map>
 				<entry key="action" value="UsernameToken" />
@@ -51,7 +47,45 @@
 			</map>
 		</constructor-arg>
 	</bean>
+	
+	<bean id="passwordDigestInterceptor" class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
+		<constructor-arg>
+			<map>
+				<entry key="action" value="UsernameToken Timestamp" />
+				<entry key="passwordType" value="PasswordDigest" />
+				<entry key="passwordCallbackRef"><ref bean="securePasswordCallback" /></entry>
+				<entry key="user" value="wfssoap"/>
+			</map>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="encryptInterceptor" class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
+		<constructor-arg>
+			<map>
+				<entry key="action" value="UsernameToken Timestamp Encrypt" />
+				<entry key="passwordType" value="PasswordDigest" />
+				<entry key="passwordCallbackRef"><ref bean="securePasswordCallback" /></entry>
+				<entry key="decryptionParts" value="{Content}{http://schemas.xmlsoap.org/soap/envelope/}Body"/>
+				<entry key="decryptionPropFile" value="serverKeystore.properties"/>
+				<entry key="user" value="wfssoap"/>
+			</map>
+		</constructor-arg>
+	</bean>
 
+	<bean id="encryptOutInterceptor" class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
+		<constructor-arg>
+			<map>
+				<entry key="action" value="Encrypt" />
+				<entry key="user" value="user1" />
+				<entry key="encryptionPropFile" value="serverKeystore.properties" />
+				<entry key="encryptionUser" value="user1" />
+				<entry key="passwordCallbackRef">
+					<ref bean="securePasswordCallback" />
+				</entry>
+			</map>
+		</constructor-arg>
+	</bean> 
+	
 </beans>
  
  

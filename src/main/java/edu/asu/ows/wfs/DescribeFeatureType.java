@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 
 import edu.asu.datastore.FeatureSourceCollection;
 import edu.asu.ows.IOperation;
-import edu.asu.ows.OperationGeneral;
 
 @Component
 public class DescribeFeatureType extends OperationGeneral implements IOperation {
@@ -59,7 +58,7 @@ public class DescribeFeatureType extends OperationGeneral implements IOperation 
 		sb.append("</xsd:complexType>");
 		sb.append("<xsd:element name='" + featureName + "' ");
 		sb.append("substitutionGroup='gml:AbstractFeature' ");
-		sb.append("type='" + this.getServiceIdentification().getServiceNameSpace() + ":" + featureName + "Type'/>");
+		sb.append("type='" + this.getWfsServiceIdentification().getServiceNameSpace() + ":" + featureName + "Type'/>");
 		return sb.toString();
 	}
 
@@ -107,7 +106,7 @@ public class DescribeFeatureType extends OperationGeneral implements IOperation 
 	
 	@Override
 	public String getCapabilities() {
-		return this.getCapabilities(this.getName());
+		return super.buildCapabilities(this.getName());
 	}
 
 	@Override
@@ -124,4 +123,13 @@ public class DescribeFeatureType extends OperationGeneral implements IOperation 
 		return featureSourceCollection;
 	}
 
+	@Override
+	protected String[] getAcceptFormats() {
+		return new String[]{"text/xml"};
+	}
+
+	@Override
+	protected String[] getAcceptVersions() {
+		return new String[]{Constant.WFS_VERSION_2_0};
+	}
 }

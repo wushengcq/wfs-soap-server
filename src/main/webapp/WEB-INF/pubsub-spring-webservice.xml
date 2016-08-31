@@ -1,0 +1,47 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xmlns:soap="http://cxf.apache.org/bindings/soap" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-4.0.xsd 
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx-4.0.xsd 
+		http://www.springframework.org/schema/jee 
+		http://www.springframework.org/schema/jee/spring-jee-4.0.xsd 
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-4.0.xsd 
+		http://www.springframework.org/schema/aop 
+	    http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+	    http://www.springframework.org/schema/task
+	    http://www.springframework.org/schema/task/spring-task-4.0.xsd
+	    http://www.springframework.org/schema/tx
+	    http://www.springframework.org/schema/tx/spring-tx.xsd
+	    http://www.springframework.org/schema/util 
+	    http://www.springframework.org/schema/util/spring-util.xsd
+        http://cxf.apache.org/jaxws 
+        http://cxf.apache.org/schemas/jaxws.xsd">
+
+	<!-- Import Apache CXF Bean Definition -->
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+
+	<bean id="pubSubSoapServiceImpl" class="edu.asu.ows.pubsub.PubSubSoapServiceImpl"></bean>
+
+	<jaxws:server id="subpub-kvp" serviceClass="edu.asu.ows.publisher.PubsubPortType"
+		address="/pubsub/kvp" bindingId="http://cxf.apache.org/bindings/xformat">
+		<jaxws:serviceBean>
+			<ref bean="pubSubSoapServiceImpl" />
+		</jaxws:serviceBean>
+	</jaxws:server>
+	
+	<jaxws:server id="subpub-soap12" serviceClass="edu.asu.ows.publisher.PubsubPortType"
+		address="/subpub/soap/1.2" bindingId="http://www.w3.org/2003/05/soap/bindings/HTTP/">
+		<jaxws:serviceBean>
+			<ref bean="pubSubSoapServiceImpl" />
+		</jaxws:serviceBean>
+		<jaxws:binding>
+			<soap:soapBinding mtomEnabled="false" version="1.2" />
+		</jaxws:binding>
+	</jaxws:server>
+	
+</beans>

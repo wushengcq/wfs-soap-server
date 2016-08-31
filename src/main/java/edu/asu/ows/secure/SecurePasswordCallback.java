@@ -22,9 +22,6 @@ public class SecurePasswordCallback implements CallbackHandler {
 		
 		User user = this.getUserManager().getUser(callback.getIdentifier());
 		if (user != null) {			
-//			if (! user.getPassword().equals(callback.getPassword())) {
-//				throw new SecurityException("Incorrect password.");
-//			}
 			callback.setPassword(user.getPassword());
 		} else {
 			throw new SecurityException("Invalid user.");

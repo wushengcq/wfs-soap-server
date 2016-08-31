@@ -36,7 +36,6 @@ import org.xml.sax.SAXException;
 
 import edu.asu.datastore.FeatureSourceCollection;
 import edu.asu.ows.IOperation;
-import edu.asu.ows.OperationGeneral;
 import edu.asu.ows.Utils;
 import net.opengis.wfs._2.FeatureCollectionType;
 import net.opengis.wfs._2.GetFeatureType;
@@ -125,7 +124,7 @@ public class GetFeature extends OperationGeneral implements IOperation {
 	
 	@Override
 	public String getCapabilities() {
-		return this.getCapabilities(this.getName());
+		return super.buildCapabilities(this.getName());
 	}
 	
 	@Override
@@ -139,6 +138,16 @@ public class GetFeature extends OperationGeneral implements IOperation {
 	}
 	public FeatureSourceCollection getFeatureSourceCollection() {
 		return featureSourceCollection;
+	}
+
+	@Override
+	protected String[] getAcceptFormats() {
+		return new String[]{"application/gml+xml; version=3.2", "application/gml+xml; version=2.1"};
+	}
+
+	@Override
+	protected String[] getAcceptVersions() {
+		return new String[]{Constant.WFS_VERSION_2_0};
 	}
 	
 

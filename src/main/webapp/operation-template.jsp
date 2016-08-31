@@ -15,6 +15,8 @@ int port = request.getServerPort();
 String binding = (String)request.getParameter("binding");
 String operation = (String)request.getParameter("operation");
 String dataset = (String)request.getParameter("dataset");
+String userName = "user1";
+String password = "123456";
 %>
 <html>
 <head>
@@ -75,15 +77,20 @@ String dataset = (String)request.getParameter("dataset");
 <div class="row">
 	<div class="catalog">&nbsp;</div> 
 	<div class="option">
+		<input type='radio' class="binding" name="binding" id="soap11-sec" value="soap11-sec"
+			<%=binding.equals("soap11-sec")? "checked='checked'" : "" %> >
+		<label for="soap11-sec"> Secured SOAP1.1 (Plain password)</label>
+	</div>		
+	<div class="option">
 		<input type='radio' class="binding" name="binding" id="soap12-sec" value="soap12-sec" 
 			<%=binding.equals("soap12-sec")? "checked='checked'" : "" %> >
-		<label for="soap12-sec"> Secured SOAP1.2</label>
+		<label for="soap12-sec"> Secured SOAP1.2 (Password digest)</label>
 	</div>
 	<div class="option">
-		<input type='radio' class="binding" name="binding" id="soap12mtom-sec" value="soap12mtom-sec"
-			<%=binding.equals("soap12mtom-sec")? "checked='checked'" : "" %> >
-		<label for="soap12mtom-sec"> Secured SOAP1.2 / MTOM</label>
-	</div>	
+		<input type='radio' class="binding" name="binding" id="soap12-encrypt" value="soap12-encrypt"
+			<%=binding.equals("soap12-encrypt")? "checked='checked'" : "" %> >
+		<label for="soap12-encrypt"> Secured SOAP1.2 (Encrypt)</label>
+	</div>
 </div>
 
 <div class="row">
@@ -150,18 +157,21 @@ String dataset = (String)request.getParameter("dataset");
 		StringBuffer sb = new StringBuffer();
 		if( binding.startsWith("soap11") ){
 			sb.append("<soap:Envelope xmlns:soap='http://schemas.xmlsoap.org/soap/envelope/' ");
-			sb.append("xmlns:xsd='http://www.w3.org/2001/XMLSchema' ");
-			sb.append("xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>");
+			//sb.append("xmlns:xsd='http://www.w3.org/2001/XMLSchema' ");
+			//sb.append("xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>");
+			sb.append(">");
 			if (binding.endsWith("sec")){
 				sb.append("<soap:Header>");
+				/**/
 				sb.append("<wsse:Security xmlns:wsse='http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd' "
 						+ "xmlns:wsu='http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd' "
 						+ " soap:mustUnderstand='1'>");
 				sb.append("<wsse:UsernameToken wsu:Id='UsernameToken-a612a4ab-667a-4774-bc49-8c6c5833ebc1'>");
-				sb.append("<wsse:Username>guest</wsse:Username>");
+				sb.append("<wsse:Username>user1</wsse:Username>");
 				sb.append("<wsse:Password Type='http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText'>123456</wsse:Password>");
 				sb.append("</wsse:UsernameToken>");
-				sb.append("</wsse:Security>");
+				sb.append("</wsse:Security>");				
+				//sb.append(SecurityHeaderHelper.create(userName, password));
 				sb.append("</soap:Header>");
 			}else {
 				sb.append("<soap:Head></soap:Head>");
@@ -170,28 +180,26 @@ String dataset = (String)request.getParameter("dataset");
 			sb.append(soapRequest);
 			sb.append("</soap:Body>");
 			sb.append("</soap:Envelope>");
-		} else if (binding.startsWith("soap12")) {
+		} else if (binding.startsWith("soap12") && binding.indexOf("encrypt") < 0) {
 			sb.append("<soap:Envelope xmlns:soap='http://www.w3.org/2003/05/soap-envelope' ");
-			sb.append("xmlns:xsd='http://www.w3.org/2001/XMLSchema' ");
-			sb.append("xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>");
+			//sb.append("xmlns:xsd='http://www.w3.org/2001/XMLSchema' ");
+			//sb.append("xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>");
+			sb.append(">");
 			if (binding.endsWith("sec")){
 				sb.append("<soap:Header>");
-				sb.append("<wsse:Security xmlns:wsse='http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd' "
-						+ "xmlns:wsu='http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd' "
-						+ " soap:mustUnderstand='1'>");
-				sb.append("<wsse:UsernameToken wsu:Id='UsernameToken-a612a4ab-667a-4774-bc49-8c6c5833ebc1'>");
-				sb.append("<wsse:Username>guest</wsse:Username>");
-				sb.append("<wsse:Password Type='http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText'>123456</wsse:Password>");
-				sb.append("</wsse:UsernameToken>");
-				sb.append("</wsse:Security>");
+				sb.append(SecurityHeaderHelper.create(userName, password));
 				sb.append("</soap:Header>");
-			}else {
+			} else {
 				sb.append("<soap:Head></soap:Head>");
 			}
 			sb.append("<soap:Body>");
 			sb.append(soapRequest);
 			sb.append("</soap:Body>");
 			sb.append("</soap:Envelope>");		
+		} else if (binding.indexOf("encrypt") > 0) {
+			EncryptHelper helper = new EncryptHelper();
+			helper.encryptSoap("user1", soapRequest);
+			sb.append(helper.getEncyptRequest());
 		} else {		
 			sb.append(soapRequest);
 		}
