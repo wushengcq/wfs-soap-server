@@ -1,11 +1,14 @@
-package edu.asu.ows.wfs;
+package edu.asu.ows.wfs.v110;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import edu.asu.datastore.FeatureSourceCollection;
 import edu.asu.ows.IOperation;
-import net.opengis.wfs._2.GetCapabilitiesType;
+import edu.asu.ows.wfs.Constant;
+import edu.asu.ows.wfs.OperationGeneral;
+import edu.asu.ows.wfs._1_1_0.ServiceExceptionReport;
+import net.opengis.wfs._1.GetCapabilitiesType;
 
 @Component("wfsGetCapabilities")
 public class GetCapabilities extends OperationGeneral implements IOperation {
@@ -14,37 +17,7 @@ public class GetCapabilities extends OperationGeneral implements IOperation {
 	@Autowired private DescribeFeatureType describeFeatureType = null;
 	
 	public String getWfsServerCapabilities(GetCapabilitiesType request) throws ServiceExceptionReport {
-		return this.v2_0_0_impl();
-	}
-	
-	private String v2_0_0_impl(){
-		StringBuffer sb = new StringBuffer();
-		sb.append("<wfs:WFS_Capabilities "
-				+ "xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' "
-				+ "xmlns='http://www.opengis.net/wfs/2.0' "
-				+ "xmlns:wfs='http://www.opengis.net/wfs/2.0' "
-				+ "xmlns:ows='http://www.opengis.net/ows/1.1' "
-				+ "xmlns:gml='http://www.opengis.net/gml/3.2' "
-				+ "xmlns:fes='http://www.opengis.net/fes/2.0' "
-				+ "xmlns:xlink='http://www.w3.org/1999/xlink' "
-				+ "xmlns:xs='http://www.w3.org/2001/XMLSchema' "
-				+ "xmlns:" + this.getWfsServiceIdentification().getServiceNameSpace() + "='" 
-				+ 			 this.getNameSpaceUrl() + "' "
-				+ "xsi:schemaLocation='http://schemas.opengis.net/wfs/2.0/wfs.xsd http://www.opengis.net/wfs/2.0' "
-				+ "version='" + Constant.WFS_VERSION_2_0 + "' "
-				+ ">");
-		this.getWfsServiceIdentification().setServiceTypeVersion(Constant.WFS_VERSION_2_0);
-		sb.append(this.getWfsServiceIdentification().getCapabilities());
-		sb.append(this.getServiceProvider().getCapabilities());
-		sb.append("<ows:OperationsMetadata>");
-		sb.append(this.getCapabilities());
-		sb.append(this.describeFeatureType.getCapabilities());
-		sb.append(this.getFeature.getCapabilities());
-		sb.append("</ows:OperationsMetadata>");		
-		sb.append(this.featureSourceCollection.getCapabilities());	
-		//sb.append(this.getFilterCapabilities());
-		sb.append("</wfs:WFS_Capabilities>");
-		return sb.toString();
+		return this.v1_1_0_impl();
 	}
 	
 	private String v1_1_0_impl(){

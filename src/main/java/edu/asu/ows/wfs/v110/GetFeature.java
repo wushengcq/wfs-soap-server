@@ -1,4 +1,4 @@
-package edu.asu.ows.wfs;
+package edu.asu.ows.wfs.v110;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -16,17 +16,12 @@ import org.dom4j.Element;
 import org.dom4j.Namespace;
 import org.dom4j.QName;
 import org.dom4j.io.SAXReader;
+import org.eclipse.emf.common.util.EList;
 import org.geotools.data.FeatureSource;
 import org.geotools.data.Query;
-import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.feature.FeatureCollection;
-import org.geotools.feature.FeatureIterator;
-import org.geotools.gml3.GMLConfiguration;
-import org.geotools.GML;
-import org.geotools.GML.Version;
 import org.geotools.xml.Configuration;
 import org.geotools.xml.Parser;
-
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
@@ -37,11 +32,12 @@ import org.xml.sax.SAXException;
 import edu.asu.datastore.FeatureSourceCollection;
 import edu.asu.ows.IOperation;
 import edu.asu.ows.Utils;
-import net.opengis.wfs._2.FeatureCollectionType;
-import net.opengis.wfs._2.GetFeatureType;
-
-import org.geotools.xml.Parser;
-import org.geotools.xml.Encoder;
+import edu.asu.ows.wfs.Constant;
+import edu.asu.ows.wfs.GML21;
+import edu.asu.ows.wfs.GML31;
+import edu.asu.ows.wfs.OperationGeneral;
+import net.opengis.wfs._1.FeatureCollectionType;
+import net.opengis.wfs._1.GetFeatureType;
 
 @Component
 public class GetFeature extends OperationGeneral implements IOperation {
@@ -49,7 +45,7 @@ public class GetFeature extends OperationGeneral implements IOperation {
 	private FeatureSourceCollection featureSourceCollection = null;
 
 	public FeatureCollectionType run(GetFeatureType request) throws IOException, JAXBException, ParserConfigurationException, SAXException, DocumentException, DatatypeConfigurationException {
-		String xml = Utils.marshalV2(GetFeatureType.class, request, Constant.NS_WFS20_URL, "GetFeature");
+		String xml = Utils.marshalV2(GetFeatureType.class, request, Constant.NS_WFS110_URL, "GetFeature");
 		logger.debug("version : " + request.getVersion());
 		Query query = this.retrieveQuery(xml);
 		FeatureSource<SimpleFeatureType, SimpleFeature> featureSource = this.getFeatureSourceCollection().getFeatureSource(query.getTypeName());
@@ -57,8 +53,8 @@ public class GetFeature extends OperationGeneral implements IOperation {
 		int matched = totalFeature.size();
 		logger.debug("matched collection size : " + matched);
 		
-		if (request.getCount().intValue() > 0) {
-			query.setMaxFeatures(request.getCount().intValue());
+		if (request.getMaxFeatures().intValue() > 0) {
+			query.setMaxFeatures(request.getMaxFeatures().intValue());
 			logger.debug("max features : " + query.getMaxFeatures());
 		}		
 		FeatureCollection<SimpleFeatureType, SimpleFeature> featureCollection = featureSource.getFeatures(query);
@@ -71,20 +67,23 @@ public class GetFeature extends OperationGeneral implements IOperation {
 		
 		if (outputFormat.contains("gml")) {
 			if (outputFormat.contains("version=3") || outputFormat.contains("gml3")) {
-				GML32 gml32 = new GML32();
-				gml32.setNamespace("testbed2", "http://gci.asu.edu/testbed12");
-				gml32.encode(out, featureCollection, matched);				
+				logger.debug("GML 3.1");
+				GML31 gml31 = new GML31();
+				gml31.setNamespace("testbed12", "http://gci.asu.edu/testbed12");
+				gml31.encode(out, featureCollection, matched);				
 			} else if (outputFormat.contains("version=2") || outputFormat.contains("gml2")) {
+				logger.debug("GML 2.1");
 				GML21 gml21 = new GML21();
-				gml21.setNamespace("testbed2", "http://gci.asu.edu/testbed12");
+				gml21.setNamespace("testbed12", "http://gci.asu.edu/testbed12");
 				gml21.encode(out, featureCollection, matched);
 			} else {
 				throw new IOException("Failed to find response for output format " + outputFormat); 
 			}
-			out.close();
+			
 			String gml = new String(out.toByteArray(), "UTF-8");
-			//logger.debug(gml);
-			return Utils.unmarshal(FeatureCollectionType.class, gml); 
+			logger.debug(gml);
+			out.close();			
+			return Utils.unmarshal(net.opengis.wfs._1.FeatureCollectionType.class, gml); 
 		} else {
 			throw new IOException("Failed to find response for output format " + outputFormat);
 		}		
@@ -94,11 +93,11 @@ public class GetFeature extends OperationGeneral implements IOperation {
 	private Query retrieveQuery(String xml) throws ParserConfigurationException, SAXException, IOException, DocumentException {
 		SAXReader reader = new SAXReader();
 		Document doc = reader.read(new ByteArrayInputStream(xml.getBytes()));
-		Namespace wfsNamespace =  new Namespace("wfs", Constant.NS_WFS20_URL);
-		Namespace filterNamespace =  new Namespace("fes", Constant.NS_FILTER_20_URL);
+		Namespace wfsNamespace =  new Namespace("wfs", Constant.NS_WFS110_URL);
+		Namespace filterNamespace =  new Namespace("ogc", Constant.NS_FILTER_OGC_URL);
 		
 		Element xmlQuery = doc.getRootElement().element(new QName("Query", wfsNamespace));
-		String typeNames = xmlQuery.attributeValue("typeNames");		
+		String typeNames = xmlQuery.attributeValue("typeName");		
 		logger.debug(typeNames);
 				
 		String[] properties = null;
@@ -115,7 +114,8 @@ public class GetFeature extends OperationGeneral implements IOperation {
 		Element xmlFilter = xmlQuery.element(new QName("Filter", filterNamespace));		
 		if (xmlFilter != null) {
 			logger.debug(xmlFilter.asXML());
-			Configuration configuration = new org.geotools.filter.v2_0.FESConfiguration();
+			Configuration configuration = new org.geotools.filter.v1_1.OGCConfiguration();
+			//Configuration configuration = new org.geotools.filter.v2_0.FESConfiguration();
 			Parser parser = new Parser( configuration );
 			filter = (Filter) parser.parse(new ByteArrayInputStream(xmlFilter.asXML().getBytes()));
 		}

@@ -12,6 +12,7 @@ String host = request.getServerName();
 String path = request.getContextPath();
 int port = request.getServerPort(); 
 
+String version = (String)request.getParameter("version");
 String binding = (String)request.getParameter("binding");
 String operation = (String)request.getParameter("operation");
 String dataset = (String)request.getParameter("dataset");
@@ -43,6 +44,20 @@ String password = "123456";
 	<div class=catalog>WSDL Catalog</div><a href="<%=prot%>://<%=host%>:<%=port%><%=path%>/ows" target="_blank"> 
 		<%=prot%>://<%=host%>:<%=port%><%=path%>/ows
 	</a>
+</div>
+
+<div class="row">
+	<div class="catalog">WFS Version</div> 
+	<div class="option">
+		<input type='radio' class="version" name="version" id="wfs200" value="2.0.0" 
+			<%=version.equals("2.0.0")? "checked='checked'" : "" %> >
+		<label for="soap12"> WFS 2.0.0</label>
+	</div>	
+	<div class="option">
+		<input type='radio' class="version" name="version" id="wfs110" value="1.1.0" 
+			<%=version.equals("1.1.0")? "checked='checked'" : "" %> >
+		<label for="soap12"> WFS 1.1.0</label>
+	</div>
 </div>
 
 <div class="row">

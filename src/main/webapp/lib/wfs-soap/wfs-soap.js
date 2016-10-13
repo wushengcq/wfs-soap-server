@@ -9,6 +9,11 @@ function startup() {
 function initSendButton() {
     $("#sendButton").click(function(e){
     	var path = "";
+    	var version = "";
+    	if ("1.1.0" == getVersion()) {
+    		version = "1.1.0/"
+    	}
+    	
     	var binding = getBinding();
     	if (binding == "soap12") {
     		path = "soap/1.2";
@@ -28,7 +33,7 @@ function initSendButton() {
     		path = "soap/1.2/encrypt"
     	}   	
     	var soapMessage = $("#soapMessage").val();
-		var endpoint = "/services/ows/wfs/" + path;
+		var endpoint = "/services/ows/wfs/" + version + path;
 		var protocol = $("#sendButton").attr("protocol");
 		var header = {'Accept':'text/plain, */*; q=0.01'};
         sendSoap(endpoint, soapMessage, header);
@@ -79,11 +84,16 @@ function initClearButton() {
 function initOptioinButton() {
 	$("input[type=radio]").change(function(e){
 		var url = getOperation() + ".jsp?"
-			+ "binding=" + getBinding() 
+			+ "version=" + getVersion()
+			+ "&binding=" + getBinding() 
 			+ "&operation=" + getOperation()
 			+ "&dataset=" + getDataset(); 
 		window.location.href = url;
 	});
+}
+
+function getVersion() {
+	return $("input[name='version']:checked").val();
 }
 
 function getBinding() {

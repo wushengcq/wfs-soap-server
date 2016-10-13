@@ -1,4 +1,4 @@
-package edu.asu.ows.wfs;
+package edu.asu.ows.wfs.v200;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,8 +16,10 @@ import org.springframework.stereotype.Component;
 
 import edu.asu.datastore.FeatureSourceCollection;
 import edu.asu.ows.IOperation;
+import edu.asu.ows.wfs.Constant;
+import edu.asu.ows.wfs.OperationGeneral;
 
-@Component
+@Component("v110DescribeFeatureType")
 public class DescribeFeatureType extends OperationGeneral implements IOperation {
 	private Logger logger = Logger.getLogger(DescribeFeatureType.class);
 	private FeatureSourceCollection featureSourceCollection = null;
@@ -94,10 +96,10 @@ public class DescribeFeatureType extends OperationGeneral implements IOperation 
 		case "java.lang.Boolean":	return xsd+"boolean";
 		case "com.vividsolutions.jts.geom.Point":	return "gml:PointPropertyType";	
 		case "com.vividsolutions.jts.geom.LineString" : return "gml:LineStringPropertyType";
-		case "com.vividsolutions.jts.geom.Polygon" : return "gml:PolygonPropertyType";
+		case "com.vividsolutions.jts.geom.Polygon" : return "gml:SurfacePropertyType";
 		case "com.vividsolutions.jts.geom.MultiPoint" : return "gml:MultiPointPropertyType";
-		case "com.vividsolutions.jts.geom.MultiLineString" : return "gml:MutliLineStringPropertyType";
-		case "com.vividsolutions.jts.geom.MultiPolygon" : return "gml:MultiPolygonPropertyType";
+		case "com.vividsolutions.jts.geom.MultiLineString" : return "gml:MultiLineStringPropertyType";
+		case "com.vividsolutions.jts.geom.MultiPolygon" : return "gml:MultiSurfacePropertyType";
 		case "org.geotools.data.Feature" : return "gml:AbstractFeatureType";
 		default:
 			throw new java.lang.UnknownError("Unknown feature attribute type " + clazz.getName());
